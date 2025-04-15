@@ -1,0 +1,77 @@
+/* ChatBotPage.css */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  padding: 20px;
+  background-color: #3b82f6; /* 헤더 배경색 */
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+.chatbot-container {
+  width: 80%;
+  max-width: 600px;
+  background-color: #f4f4f9;
+  padding: 20px;
+  border-radius: 10px;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.message {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+.message-user {
+  background-color: #3b82f6;
+  color: white;
+  align-self: flex-end;
+}
+
+.message-bot {
+  background-color: #e5e7eb;
+  color: #333;
+  align-self: flex-start;
+}
+
+.input-container {
+  display: flex;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.input-field {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.send-button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.send-button:hover {
+  background-color: #2563eb;
+}
