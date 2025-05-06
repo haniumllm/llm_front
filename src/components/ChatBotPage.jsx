@@ -1,10 +1,39 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ChatBotPage.css";
 
+const mockPatentResults = [
+  {
+    number: 1,
+    title: "개인맞춤형 약물치료관리 방법 및 이를 위한 시스템",
+    applicationNumber: "1020220182493",
+    summary: "본 발명은 개인맞춤형 약물치료관리 방법 및 이를 위한 시스템에 관한 것이다. 구체적으로 본 발명은 사용자의 의약품 및 약물치료에 대한 현황을 관리해 주는 주체로 약국 또는 약국서버를 활용함으로써 사용자의 개인맞춤형 약물치료관리 서비스를 제공하는 것에 관한 것이다.",
+    status: "공개",
+    link: "https://kpat.kipris.or.kr/kpat/biblioa.do?method=biblio&applicationNumber=1020220182493",
+  },
+  {
+    number: 2,
+    title: "개인맞춤형 뇌 자극 시스템 및 이를 이용한 뇌 자극 방법",
+    applicationNumber: "1020230194662",
+    summary: "본 발명의 일 실시예에 따른 개인맞춤형 뇌 자극 시스템은 사용자의 우울증 증상을 평가하고, 이에 따라 맞춤형 뇌 자극을 제공하는 시스템이다.",
+    status: "등록",
+    link: "https://kpat.kipris.or.kr/kpat/biblioa.do?method=biblio&applicationNumber=1020230194662",
+  },
+  {
+    number: 3,
+    title: "개인맞춤형 생활체육 추천 플랫폼 시스템",
+    applicationNumber: "1020180166967",
+    summary: "본 발명의 일 실시예에 따른 개인맞춤형 생활체육 추천 플랫폼 시스템은 사용자 정보, 신체 정보, 관심 정보를 포함하는 개인 데이터를 제공하는 사용자 단말; 및 상기 개인 데이터를 수집하고, 복수의 공공 데이터를 연계 서버로부터 크롤링하며, 상기 개인 데이터와 공공 데이터를 기초로 미리 설정된 기계 학습 및 추천 알고리즘을 통하여 개인화된 맞춤형 생활 체육 종목과 지역 기반의 생활체육 시설 정보를 상기 사용자 단말로 제공하는 정보제공서버를 포함한다.",
+    status: "등록",
+    link: "https://kpat.kipris.or.kr/kpat/biblioa.do?method=biblio&applicationNumber=1020180166967"
+  },
+];
+
 export default function ChatBotPage() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const chatEndRef = useRef(null);
+  const [results, setResults] = useState([]);
+  const [expandedIndexes, setExpandedIndexes] = useState([]);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -12,17 +41,28 @@ export default function ChatBotPage() {
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
 
-    let botResponse = "특허 분석 정보를 찾을 수 없습니다.";
-    if (input.includes("AI")) {
-      botResponse = "🤖 AI 기반 대화형 특허 분석 시스템을 찾았습니다.";
-    } else if (input.includes("자율 주행 드론")) {
-      botResponse = "🚗 자율 주행 드론 관련 특허 목록을 불러왔습니다.";
+    const lowerInput = input.toLowerCase();
+    let botResponse = "";
+
+    if (lowerInput.includes("개인 맞춤형 학습 경로 추천 교육 플랫폼")) {
+      botResponse = "🔍 관련 특허를 찾았습니다. 아래에서 확인해보세요!";
+      setResults(mockPatentResults);
+    } else {
+      botResponse = "❌ 해당 키워드에 대한 특허를 찾을 수 없습니다.";
+      setResults([]);
     }
 
     const botMessage = { sender: "bot", text: botResponse };
     setTimeout(() => setMessages((prev) => [...prev, botMessage]), 500);
-
     setInput("");
+  };
+
+  const toggleSummary = (index) => {
+    setExpandedIndexes((prev) =>
+        prev.includes(index)
+            ? prev.filter((i) => i !== index)
+            : [...prev, index]
+    );
   };
 
   useEffect(() => {
@@ -32,62 +72,48 @@ export default function ChatBotPage() {
   return (
       <div className="chatbot-wrapper">
         <div className="results-section">
-          <div className="results-header">상세 내용</div>
-          <div className="results-timestamp">자율 주행 드론 — 분석완료 00:01:00s</div>
-          <ul className="results-list">
-            <li>
-              <div className="result-title">1. 자율주행장치 레이싱게임 제공방법과 시스템</div>
-              <div className="result-sub">출원번호: 1020190088451 | 유사율 58.15%</div>
-              <div className="result-actions">
-                <button>요약 보기</button>
-                <button>우회전략</button>
-                <button>PDF 보기</button>
-              </div>
-            </li>
-            <li>
-              <div className="result-title">2. 자율 주행 기기를 이용한 사용자 맞춤 정보 제공 시스템</div>
-              <div className="result-sub">출원번호: 1020210141677 | 유사율 80%</div>
-              <div className="result-actions">
-                <button>요약 보기</button>
-                <button>우회전략</button>
-                <button>PDF 보기</button>
-              </div>
-            </li>
-            <li>
-              <div className="result-title">3. 인공지능 기반 자연어 처리 챗봇 시스템</div>
-              <div className="result-sub">출원번호: 1020220099888 | 유사율 76.42%</div>
-              <div className="result-actions">
-                <button>요약 보기</button>
-                <button>우회전략</button>
-                <button>PDF 보기</button>
-              </div>
-            </li>
-            <li>
-              <div className="result-title">4. 드론 영상 분석을 위한 AI 모델 자동 학습 시스템</div>
-              <div className="result-sub">출원번호: 1020230001123 | 유사율 66.77%</div>
-              <div className="result-actions">
-                <button>요약 보기</button>
-                <button>우회전략</button>
-                <button>PDF 보기</button>
-              </div>
-            </li>
-            <li>
-              <div className="result-title">5. 딥러닝 기반 실시간 객체 추적용 드론 제어 장치</div>
-              <div className="result-sub">출원번호: 1020230054321 | 유사율 82.94%</div>
-              <div className="result-actions">
-                <button>요약 보기</button>
-                <button>우회전략</button>
-                <button>PDF 보기</button>
-              </div>
-            </li>
-          </ul>
+          <div className="results-header">🔍 검색된 특허 목록</div>
+          {results.length === 0 ? (
+              <div style={{ color: "#888", fontStyle: "italic" }}>검색 결과가 없습니다.</div>
+          ) : (
+              <ul className="results-list">
+                {results.map((item, idx) => (
+                    <li key={idx}>
+                      <div className="result-title">
+                        📌 번호: {item.number} — {item.title}
+                      </div>
+                      <div className="result-sub">
+                        📌 출원번호: {item.applicationNumber} | 📌 등록상태: {item.status}
+                      </div>
+                      <div className="result-actions">
+                        <button onClick={() => toggleSummary(idx)}>요약 보기</button>
+                        <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: "none" }}
+                        >
+                          <button>상세보기</button>
+                        </a>
+                      </div>
+                      {expandedIndexes.includes(idx) && (
+                          <div className="result-summary">
+                            <strong>📄 특허내용:</strong> {item.summary}
+                          </div>
+                      )}
+                    </li>
+                ))}
+              </ul>
+          )}
         </div>
 
         <div className="chat-section">
-          <div className="chat-header">특허정보</div>
+          <div className="chat-header">💬 특허정보 챗봇</div>
           <div className="chat-box">
             {messages.map((msg, i) => (
-                <div key={i} className={`chat-message ${msg.sender}`}>{msg.text}</div>
+                <div key={i} className={`chat-message ${msg.sender}`}>
+                  {msg.text}
+                </div>
             ))}
             <div ref={chatEndRef} />
           </div>
